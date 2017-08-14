@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
-    public void initRetrofit()
+    public void initRetrofit()//Initialise rétrofit
     {
         Retrofit.Builder builder = new Retrofit.Builder()
                 .baseUrl("http://192.168.1.254/git/api_EverydayDrinking/web/")
@@ -80,16 +80,16 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
-    public void getUsers()
+    public void getUsers()//Récupére l'entité user
     {
-        UserService userService = retrofit.create(UserService.class);
-        authHeader = "Basic " + Base64.encodeToString(base.getBytes(), Base64.NO_WRAP);
-        Call<List<User>> call = userService.getUsers(authHeader);
+        UserService userService = retrofit.create(UserService.class);// Récupere le service pour acceder a l'entité user
+        authHeader = "Basic " + Base64.encodeToString(base.getBytes(), Base64.NO_WRAP);//code le mot de passe
+        Call<List<User>> call = userService.getUsers(authHeader);// insére les identifiants dans le header pour le serveur
 
         call.enqueue(new Callback<List<User>>() {
 
             @Override
-            public void onResponse(Call<List<User>> call, Response<List<User>> response) {
+            public void onResponse(Call<List<User>> call, Response<List<User>> response) {//Si retrofit a bien récupérer les données
                 if (response.isSuccessful()) {
                     System.out.println("Users Sa fonctionne");
                     System.out.println(response.code());
@@ -105,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
 
             }
             @Override
-            public void onFailure(Call<List<User>> call, Throwable t) {
+            public void onFailure(Call<List<User>> call, Throwable t) {//Si une erreur avec retrofit est survenue
                 // the network call was a failure
                 System.out.println("Users Sa fonctionne pas");
                 System.out.println(t.toString());
