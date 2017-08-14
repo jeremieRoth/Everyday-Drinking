@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
 
     private ListView listView;
     private String login = "jixalas" ;
-    private String motDePasse = "BxeLisE23G";
+    private String motDePasse = "password";
     private String base = login + ":" + motDePasse;
     private String authHeader;
     private Retrofit retrofit;
