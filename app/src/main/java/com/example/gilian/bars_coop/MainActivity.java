@@ -18,6 +18,7 @@ import com.example.gilian.bars_coop.services.DrinkService;
 import com.example.gilian.bars_coop.services.EstablishmentService;
 import com.example.gilian.bars_coop.services.LocationService;
 import com.example.gilian.bars_coop.services.UserService;
+import com.example.gilian.bars_coop.services.MapActivity;
 
 
 import okhttp3.OkHttpClient;
