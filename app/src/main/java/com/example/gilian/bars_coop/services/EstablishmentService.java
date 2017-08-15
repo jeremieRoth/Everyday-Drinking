@@ -1,12 +1,12 @@
 package com.example.gilian.bars_coop.services;
 
 import com.example.gilian.bars_coop.Entity.Establishment;
-import com.example.gilian.bars_coop.Entity.User;
 
 import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.Field;
+import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
@@ -23,14 +23,19 @@ public interface EstablishmentService {
     public static final String ENDPOINT_SERVER = "http://192.168.1.254/git/api_EverydayDrinking/web";
 
     @GET("establishments")
-    Call<List<Establishment>> getUsers(@Header("Authorization")String authHeader);
+    Call<List<Establishment>> getEstablishments(@Header("Authorization")String authHeader);
 
     @GET("establishment/{id}")
-    Call<Establishment> getUser(@Header("Authorization")String authHeader,@Path("id") int id);
+    Call<Establishment> getEstablishment(@Header("Authorization")String authHeader,@Path("id") int id);
 
+    @FormUrlEncoded
     @POST("establishment")
-    Call<Establishment> addUser(@Field("q") String query);
-
+    Call<Establishment> addEstablishment(@Header("Authorization")String authHeader,
+                                @Field("name") String name,
+                                @Field("location")int location);
+    @FormUrlEncoded
     @PUT("establishment")
-    Call<Establishment> editUser(@Field("q")String query);
+    Call<Establishment> editEstablishment(@Header("Authorization")String authHeader,
+                                 @Field("name") String login,
+                                 @Field("location")String password);
 }

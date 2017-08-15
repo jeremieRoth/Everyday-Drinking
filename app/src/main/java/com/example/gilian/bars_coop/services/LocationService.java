@@ -1,12 +1,12 @@
 package com.example.gilian.bars_coop.services;
 
 import com.example.gilian.bars_coop.Entity.Location;
-import com.example.gilian.bars_coop.Entity.User;
 
 import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.Field;
+import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
@@ -23,14 +23,19 @@ public interface LocationService {
     public static final String ENDPOINT_SERVER = "http://192.168.1.254/git/api_EverydayDrinking/web";
 
     @GET("locations")
-    Call<List<Location>> getUsers(@Header("Authorization")String authHeader);
+    Call<List<Location>> getLocations(@Header("Authorization")String authHeader);
 
     @GET("location/{id}")
-    Call<Location> getUser(@Header("Authorization")String authHeader,@Path("id") int id);
+    Call<Location> getLocation(@Header("Authorization")String authHeader,@Path("id") int id);
 
+    @FormUrlEncoded
     @POST("location")
-    Call<Location> addUser(@Field("q") String query);
-
+    Call<Location> addLocation(@Header("Authorization")String authHeader,
+                           @Field("longitude") float longitude,
+                           @Field("latitude")float latitude);
+    @FormUrlEncoded
     @PUT("location")
-    Call<Location> editUser(@Field("q")String query);
+    Call<Location> editLocation(@Header("Authorization")String authHeader,
+                            @Field("longitude") float login,
+                            @Field("latitude") float password);
 }
