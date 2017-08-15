@@ -3,17 +3,16 @@ package com.example.gilian.bars_coop.services;
 //Dependencies
 import java.util.List;
 import retrofit2.Call;
+import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
-import retrofit2.http.Query;
 import retrofit2.http.Field;
 
 //Entities
 import com.example.gilian.bars_coop.Entity.User;
-import com.google.gson.JsonElement;
 
 /**
  * Created by Gilian on 06/08/2017.
@@ -30,11 +29,18 @@ public interface UserService
     @GET("user/{id}")
     Call<User> getUser(@Header("Authorization")String authHeader,@Path("id") int id);
 
+    @FormUrlEncoded
     @POST("user")
-    Call<User> addUser(@Field("q") String query);
-
-    @PUT("user")
-    Call<User> editUser(@Field("q")String query);
+    Call<User> addUser(@Header("Authorization")String authHeader,
+                       @Field("login") String login,
+                       @Field("password")String password,
+                       @Field("user_name")String username);
+    @FormUrlEncoded
+    @PUT("user/{id}")
+    Call<User> editUser(@Header("Authorization")String authHeader,
+                        @Field("login") String login,
+                        @Field("password")String password,
+                        @Field("username")String username);
 
 
 
