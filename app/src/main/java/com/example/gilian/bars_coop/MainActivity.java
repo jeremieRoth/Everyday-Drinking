@@ -74,9 +74,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent =new Intent(MainActivity.this, MapActivity.class);
-                Bundle extra = new Bundle();
-                extra.putString("user", "vador");
-                intent.putExtras(extra);
+                //Bundle extra = new Bundle();
+                User user =new User();
+                user.setId(1);
+                user.setLogin("111");
+                user.setPassword("azerty");
+                user.setUsername("vador");
+                //extra.putString("user", "vador");
+                intent.putExtra("user", user);
                 startActivity(intent);
 
 
@@ -88,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
     public void initRetrofit()//Initialise rétrofit
     {
         Retrofit.Builder builder = new Retrofit.Builder()
-                .baseUrl("http://192.168.1.254/git/api_EverydayDrinking/web/")
+                .baseUrl("http://gilian.ddns.net/git/api_EverydayDrinking/web/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(httpClient.build());
 

@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.TextView;
 
+import com.example.gilian.bars_coop.Entity.User;
 import com.example.gilian.bars_coop.R;
 
 public class MapActivity extends AppCompatActivity {
@@ -14,9 +15,9 @@ public class MapActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
         TextView text = (TextView) findViewById(R.id.hello);
-        Intent intent=getIntent();
-        Bundle extra=intent.getExtras();
-        String pseudo = extra.getString("user");
-        text.setText("bonjour "+pseudo);
+        Intent intent = getIntent();
+        Bundle extra = intent.getExtras();
+        User user = (User) extra.getParcelable("user");
+        text.setText("bonjour "+user.getUsername());
     }
 }
