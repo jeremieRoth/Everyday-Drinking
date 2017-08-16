@@ -1,12 +1,12 @@
 package com.example.gilian.bars_coop.services;
 
 import com.example.gilian.bars_coop.Entity.Drink;
-import com.example.gilian.bars_coop.Entity.User;
 
 import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.Field;
+import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
@@ -23,14 +23,22 @@ public interface DrinkService {
     public static final String ENDPOINT_SERVER = "http://192.168.1.254/git/api_EverydayDrinking/web";
 
     @GET("drinks")
-    Call<List<Drink>> getUsers(@Header("Authorization")String authHeader);
+    Call<List<Drink>> getDrinks(@Header("Authorization")String authHeader);
 
     @GET("drink/{id}")
-    Call<Drink> getUser(@Header("Authorization")String authHeader,@Path("id") int id);
+    Call<Drink> getDrink(@Header("Authorization")String authHeader,@Path("id") int id);
 
+    @FormUrlEncoded
     @POST("drink")
-    Call<Drink> addUser(@Field("q") String query);
+    Call<Drink> addDrink(@Header("Authorization")String authHeader,
+                        @Field("name") String name,
+                        @Field("price")float price,
+                        @Field("establishment")int establishment);
 
+    @FormUrlEncoded
     @PUT("drink")
-    Call<Drink> editUser(@Field("q")String query);
+    Call<Drink> editDrink(@Header("Authorization")String authHeader,
+                         @Field("name") String name,
+                         @Field("price")float price,
+                         @Field("establishment")int establishment);
 }
