@@ -2,6 +2,7 @@ package com.example.gilian.bars_coop;
 
 import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -49,14 +50,24 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        if ( ContextCompat.checkSelfPermission( this, android.Manifest.permission.ACCESS_COARSE_LOCATION ) != PackageManager.PERMISSION_GRANTED ) {
 
+            ActivityCompat.requestPermissions( this, new String[] {  android.Manifest.permission.ACCESS_COARSE_LOCATION  },
+                    99 );
+        }
         //Récupère les droits pour les version récentes d'android.
         int internetPermission = ContextCompat.checkSelfPermission(this, Manifest.permission.INTERNET);
         if(ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.INTERNET)){
 
         }else{
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.INTERNET}, permission);
+            //ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.INTERNET}, permission);
         }
+/*        int writePermission = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        if(ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)){
+
+        }else{
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, permission);
+        }*/
 
         initRetrofit();//Initialise retrofit pour accéder à l'API
         this.getUser(1);
@@ -65,14 +76,15 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent =new Intent(MainActivity.this, MapActivity.class);
-                //Bundle extra = new Bundle();
+                Bundle extra = new Bundle();
                 User user =new User();
                 user.setId(1);
                 user.setLogin("111");
                 user.setPassword("azerty");
                 user.setUsername("vador");
                 //extra.putString("user", "vador");
-                intent.putExtra("user", user);
+                extra.putParcelable("user", user);
+                intent.putExtras(extra);
                 startActivity(intent);
 
 
