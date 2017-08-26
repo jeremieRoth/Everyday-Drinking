@@ -75,27 +75,6 @@ public class MainActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, permission);
         }*/
 
-        //Initialise retrofit pour accéder à l'API
-        /*Button loginButton = (Button) findViewById(R.id.btnlogin);
-        loginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent =new Intent(MainActivity.this, MapActivity.class);
-                Bundle extra = new Bundle();
-                User user =new User();
-                user.setId(1);
-                user.setLogin("111");
-                user.setPassword("azerty");
-                user.setUsername("vador");
-                //extra.putString("user", "vador");
-                extra.putParcelable("user", user);
-                intent.putExtras(extra);
-                startActivity(intent);
-
-
-            }
-        });*/
-
         Button log_up = (Button) findViewById(R.id.btnInscription);
 
         log_up.setOnClickListener(new View.OnClickListener() {
