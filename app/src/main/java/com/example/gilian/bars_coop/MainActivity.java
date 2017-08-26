@@ -58,16 +58,19 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         if ( ContextCompat.checkSelfPermission( this, android.Manifest.permission.ACCESS_COARSE_LOCATION ) != PackageManager.PERMISSION_GRANTED ) {
 
-        loginA = (EditText) findViewById(R.id.login);
-        password =(EditText) findViewById(R.id.password);
-
-        //Récupère les droits pour les version récentes d'android.
-        int internetPermission = ContextCompat.checkSelfPermission(this, Manifest.permission.INTERNET);
-        if(ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.INTERNET)){
-
         }else{
-            //ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.INTERNET}, permission);
+            
         }
+            loginA = (EditText) findViewById(R.id.login);
+            password = (EditText) findViewById(R.id.password);
+
+            //Récupère les droits pour les version récentes d'android.
+            int internetPermission = ContextCompat.checkSelfPermission(this, Manifest.permission.INTERNET);
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.INTERNET)) {
+
+            } else {
+                //ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.INTERNET}, permission);
+            }
 /*        int writePermission = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
         if(ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)){
 
@@ -75,18 +78,17 @@ public class MainActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, permission);
         }*/
 
-        Button log_up = (Button) findViewById(R.id.btnInscription);
+            Button log_up = (Button) findViewById(R.id.btnInscription);
 
-        log_up.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent =new Intent(MainActivity.this, SignUpActivity.class);
-                startActivity(intent);
+            log_up.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(MainActivity.this, SignUpActivity.class);
+                    startActivity(intent);
 
 
-            }
-        });
-
+                }
+            });
 
     }
     public void initRetrofit()//Initialise retrofit obligatoire pour effectuer une requette
