@@ -1,4 +1,12 @@
 <resources>
     <string name="app_name">Bars-coop</string>
     <string name="login_btn">Login</string>
+    <string name="login">Username</string>
+    <string name="mdp">Password</string>
+    <string name="title">EveryDay Drinking</string>
+    <string name="btn_Inscrit"> Inscription</string>
+    <string name="log_up"> Inscription </string>
+    <string name="name"> Nom</string>
+    <string name="firstname"> Prenom </string>
+    <string name="Verifmdp"> Confirmation Password</string>
 </resources>
