@@ -1,4 +1,12 @@
 <resources>
     <string name="app_name">Bars-coop</string>
     <string name="login_btn">Login</string>
+    <string name="title_add_establishment">ajouter un Bar</string>
+    <string name="hint_add_establishment">Veuillez ajouter le nom</string>
+    <string name="cancel_add_establishment">annuler</string>
+    <string name="ok_add_establishment">ajouter</string>
+    <string name="marker_msg">clicker pour voir les info</string>
+    <string name="title_establishment">Bar</string>
+    <string name="test">test</string>
+    <string name="add_drink_btn">ajouter une boisson</string>
 </resources>

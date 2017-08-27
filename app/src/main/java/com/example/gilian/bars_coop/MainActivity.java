@@ -8,6 +8,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
@@ -36,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
     private ListView listView;
     //identifiant server
     private String login = "jixalas" ;
-    private String motDePasse = "password";
+    private String motDePasse = "BxeLisE23G";
     private String base = login + ":" + motDePasse;
     private String authHeader;
 
@@ -96,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
     public void initRetrofit()//Initialise retrofit obligatoire pour effectuer une requette
     {
         Retrofit.Builder builder = new Retrofit.Builder()
-                .baseUrl("http://gilian.ddns.net/git/api_EverydayDrinking/web/")
+                .baseUrl("http://192.168.0.16/api_EverydayDrinking/web/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(httpClient.build());
 
