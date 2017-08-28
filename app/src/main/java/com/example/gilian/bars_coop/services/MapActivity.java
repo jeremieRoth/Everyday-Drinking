@@ -173,7 +173,7 @@ public class MapActivity extends AppCompatActivity {
                                 if(name!="" && nameUsed==false){
                                     Toast.makeText(MapActivity.this, "Click ok, Bar:"+name, Toast.LENGTH_SHORT).show();
 
-                                    putEstablishment(name,latLng.getLongitude(),latLng.getLatitude());
+                                    postEstablishment(name,latLng.getLongitude(),latLng.getLatitude());
 
                                 }
                                 else{
@@ -314,7 +314,7 @@ public class MapActivity extends AppCompatActivity {
         return listCall;
     }
 
-    public void putEstablishment(String name, Double longitude, Double latitude){
+    public void postEstablishment(String name, Double longitude, Double latitude){
         LocationService locationService = retrofit.create(LocationService.class);
 
         //authHeader = "Basic " + Base64.encodeToString(base.getBytes(), Base64.NO_WRAP);
