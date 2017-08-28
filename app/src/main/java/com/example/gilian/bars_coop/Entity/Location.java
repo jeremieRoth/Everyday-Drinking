@@ -11,7 +11,7 @@ public class Location {
     @SerializedName("id")
     @Expose
     private int id;
-    @SerializedName("longitutde")
+    @SerializedName("longitude")
     @Expose
     private String longitude;
     @SerializedName("latitude")

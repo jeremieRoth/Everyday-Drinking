@@ -19,6 +19,7 @@ import android.view.View;
 import android.widget.Toast;
 import android.os.Build;
 
+import com.example.gilian.bars_coop.Entity.Comment;
 import com.example.gilian.bars_coop.Entity.Establishment;
 import com.example.gilian.bars_coop.services.Exemples.EstablishmentDialog;
 import com.mapbox.mapboxsdk.annotations.Marker;
@@ -64,6 +65,8 @@ public class MapActivity extends AppCompatActivity {
     private LocationManager lm;
     private List<Establishment> establishmentList;
 
+    public String name;
+
 
     @Override
     @RequiresPermission(Manifest.permission.ACCESS_FINE_LOCATION)
@@ -76,7 +79,7 @@ public class MapActivity extends AppCompatActivity {
         mMapView = (MapView) findViewById(R.id.mapquestMapView);
         mMapView.onCreate(savedInstanceState);
         lm= (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-
+        authHeader = "Basic " + Base64.encodeToString(base.getBytes(), Base64.NO_WRAP);
         Intent intent = getIntent();
         Bundle extra = intent.getExtras();
         user = (User) extra.getParcelable("user");
@@ -96,17 +99,17 @@ public class MapActivity extends AppCompatActivity {
                     Toast.makeText(MapActivity.this, "GPS activer ", Toast.LENGTH_SHORT).show();
                     Location location= lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
                     Log.d("GPSBis","longitude : "+location.getLongitude()+"latitude : "+location.getLatitude() );
-                    nMapboxmap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()),14));
+                    //nMapboxmap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()),14));
                 }else {
-                    nMapboxmap.setMyLocationEnabled(false);
+                    //nMapboxmap.setMyLocationEnabled(false);
                     Toast.makeText(MapActivity.this, "GPS desactiver ", Toast.LENGTH_SHORT).show();
                 }
 
 
-                lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 12000, 0, new android.location.LocationListener() {
+                lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 12000, 100, new android.location.LocationListener() {
                     @Override
                     public void onLocationChanged(Location location) {
-                        Log.d("GPS","longitude : "+location.getLongitude()+"latitude : "+location.getLatitude() );
+                        //Log.d("GPS","longitude : "+location.getLongitude()+"latitude : "+location.getLatitude() );
 
                         //nMapboxmap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()),14));
                     }
@@ -119,7 +122,11 @@ public class MapActivity extends AppCompatActivity {
                     @Override
                     public void onProviderEnabled(String s) {
                         Log.d("onProviderEnabled","msg : "+s );
+                        Long t1=System.currentTimeMillis();
+
+
                         nMapboxmap.setMyLocationEnabled(true);
+                        while (System.currentTimeMillis()<t1+1000);
                         Toast.makeText(MapActivity.this, "GPS activer ", Toast.LENGTH_SHORT).show();
                     }
 
@@ -165,15 +172,9 @@ public class MapActivity extends AppCompatActivity {
                                 }
                                 if(name!="" && nameUsed==false){
                                     Toast.makeText(MapActivity.this, "Click ok, Bar:"+name, Toast.LENGTH_SHORT).show();
-                                    addMarker(nMapboxmap,latLng, name);
 
-                                    Establishment establishment=new Establishment();
-                                    establishment.setName(name);
-                                    com.example.gilian.bars_coop.Entity.Location locationEstablishment=new com.example.gilian.bars_coop.Entity.Location();
-                                    locationEstablishment.setLatitude(Double.toString(latLng.getLatitude()));
-                                    locationEstablishment.setLongitude(Double.toString(latLng.getLongitude()));
-                                    establishment.setLocation(locationEstablishment);
-                                    establishmentList.add(establishment);
+                                    putEstablishment(name,latLng.getLongitude(),latLng.getLatitude());
+
                                 }
                                 else{
                                     Toast.makeText(MapActivity.this, "name empty or used", Toast.LENGTH_SHORT).show();
@@ -299,15 +300,71 @@ public class MapActivity extends AppCompatActivity {
 
     public Call<List<Establishment>> getEstablishments(){
         EstablishmentService establishmentService = retrofit.create(EstablishmentService.class);
-        authHeader = "Basic " + Base64.encodeToString(base.getBytes(), Base64.NO_WRAP);
+
         Call<List<Establishment>> call = establishmentService.getEstablishments(authHeader);
 
         return call;
     }
 
-    public boolean putEstablishment(){
+    public Call<List<Comment>> getComment(){
+        CommentService commentService = retrofit.create(CommentService.class);
 
-        return false;
+        Call<List<Comment>> listCall =commentService.getComments(authHeader);
+
+        return listCall;
+    }
+
+    public void putEstablishment(String name, Double longitude, Double latitude){
+        LocationService locationService = retrofit.create(LocationService.class);
+
+        //authHeader = "Basic " + Base64.encodeToString(base.getBytes(), Base64.NO_WRAP);
+        final MapActivity self=this;
+        Log.d("PostCall","location: "+latitude+" "+longitude);
+        this.name = name;
+        Call<com.example.gilian.bars_coop.Entity.Location> locationCall = locationService.addLocation(authHeader,longitude.floatValue(),latitude.floatValue());
+        locationCall.enqueue(new Callback<com.example.gilian.bars_coop.Entity.Location>() {
+            @Override
+            public void onResponse(Call<com.example.gilian.bars_coop.Entity.Location> call, Response<com.example.gilian.bars_coop.Entity.Location> response) {
+                if(response.isSuccessful()) {
+                    com.example.gilian.bars_coop.Entity.Location location = response.body();
+                    EstablishmentService establishmentService = self.retrofit.create(EstablishmentService.class);
+                    Call<Establishment> establishmentCall = establishmentService.addEstablishment(self.authHeader,self.name,location.getId());
+                    establishmentCall.enqueue(new Callback<Establishment>() {
+                        @Override
+                        public void onResponse(Call<Establishment> call, Response<Establishment> response) {
+                            if(response.isSuccessful()){
+                                Establishment establishment= response.body();
+                                self.establishmentList.add(establishment);
+                                LatLng latLngEstha = new LatLng(Double.valueOf(establishment.getLocation().getLatitude()),Double.valueOf(establishment.getLocation().getLongitude()));
+                                self.addMarker(self.nMapboxmap,latLngEstha,establishment.getName());
+                            }else {
+                                Toast.makeText(MapActivity.this, "Base de donnée inaccessibleEsth", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<Establishment> call, Throwable t) {
+                            Toast.makeText(MapActivity.this, "Base de donnée inaccessibleEsth2 throw:"+t, Toast.LENGTH_SHORT).show();
+                            Log.d("EstablishmentOnFailure","erreur"+t);
+                        }
+                    });
+                    //addMarker(nMapboxmap,latLng, name);
+                    //establishmentList.add(establishment);
+                    Log.d("PostCall","location: "+location.getLatitude()+" "+location.getLongitude()+ " id "+location.getId());
+                    Toast.makeText(MapActivity.this, "location: "+location.getLatitude()+" "+location.getLongitude()+ " id "+location.getId(), Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    Toast.makeText(MapActivity.this, "Base de donnée inaccessible", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<com.example.gilian.bars_coop.Entity.Location> call, Throwable t) {
+                Toast.makeText(MapActivity.this, "Base de donnée inaccessible", Toast.LENGTH_SHORT).show();
+            }
+        });
+       // new Callback<List<Establishment>>()
+        //establishmentService.addEstablishment()
     }
 
     public  void addMarker(MapboxMap mapboxMap, LatLng latLng, String name){
