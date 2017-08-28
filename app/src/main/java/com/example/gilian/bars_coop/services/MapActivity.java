@@ -111,7 +111,7 @@ public class MapActivity extends AppCompatActivity {
                     public void onLocationChanged(Location location) {
                         //Log.d("GPS","longitude : "+location.getLongitude()+"latitude : "+location.getLatitude() );
 
-                        //nMapboxmap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()),14));
+                        nMapboxmap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()),14));
                     }
 
                     @Override
