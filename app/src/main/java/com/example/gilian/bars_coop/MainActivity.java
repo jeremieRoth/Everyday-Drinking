@@ -21,6 +21,7 @@ import com.example.gilian.bars_coop.services.EstablishmentService;
 import com.example.gilian.bars_coop.services.LocationService;
 import com.example.gilian.bars_coop.services.UserService;
 import com.example.gilian.bars_coop.services.MapActivity;
+import com.mapbox.mapboxsdk.Mapbox;
 
 
 import okhttp3.OkHttpClient;
@@ -50,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
         if ( ContextCompat.checkSelfPermission( this, android.Manifest.permission.ACCESS_COARSE_LOCATION ) != PackageManager.PERMISSION_GRANTED ) {
 

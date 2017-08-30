@@ -20,18 +20,19 @@ import android.os.Build;
 import com.example.gilian.bars_coop.Entity.Comment;
 import com.example.gilian.bars_coop.Entity.Establishment;
 import com.example.gilian.bars_coop.MainActivity;
+import com.mapbox.mapboxsdk.Mapbox;
 import com.mapbox.mapboxsdk.annotations.Marker;
 import com.mapbox.mapboxsdk.annotations.MarkerOptions;
 import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
 import com.mapbox.mapboxsdk.geometry.LatLng;
-import com.mapquest.mapping.MapQuestAccountManager;
-import com.mapquest.mapping.maps.OnMapReadyCallback;
-import com.mapquest.mapping.maps.MapboxMap;
-import com.mapquest.mapping.maps.MapView;
+
 
 
 import com.example.gilian.bars_coop.Entity.User;
 import com.example.gilian.bars_coop.R;
+import com.mapbox.mapboxsdk.maps.MapView;
+import com.mapbox.mapboxsdk.maps.MapboxMap;
+import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -71,8 +72,8 @@ public class MapActivity extends AppCompatActivity {
     @RequiresPermission(Manifest.permission.ACCESS_FINE_LOCATION)
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        MapQuestAccountManager.start(getApplicationContext());
-
+        //MapQuestAccountManager.start(getApplicationContext());
+        Mapbox.getInstance(getApplicationContext(),"pk.eyJ1IjoiamVyZW1pZTAwMCIsImEiOiJjajZtbmQxNWQyaHVvMzNueW4wa2k0ejJtIn0.KlQLHwiDKhXCI3gobANT9Q");
         setContentView(R.layout.activity_map);
 
         mMapView = (MapView) findViewById(R.id.mapquestMapView);
@@ -83,10 +84,11 @@ public class MapActivity extends AppCompatActivity {
         Bundle extra = intent.getExtras();
         user = (User) extra.getParcelable("user");
 
-        //getMap
+        //getMapOnMapReadyCallback
         mMapView.getMapAsync(new OnMapReadyCallback() {
             @Override
-            public void onMapReady(final MapboxMap mapboxMap) {
+            public void onMapReady(MapboxMap mapboxMap) {
+
                 nMapboxmap=mapboxMap;
                 if ( Build.VERSION.SDK_INT >= 23 &&
                         ContextCompat.checkSelfPermission( MapActivity.this, android.Manifest.permission.ACCESS_FINE_LOCATION ) != PackageManager.PERMISSION_GRANTED &&
@@ -213,7 +215,7 @@ public class MapActivity extends AppCompatActivity {
                             for (Establishment establishment:establishmentList) {
                                 Log.d("Establishment","name : "+establishment.getName()+" latitude : "+establishment.getLocation().getLatitude()+" longitude : "+establishment.getLocation().getLongitude());
                                 LatLng latLngEstablishment=new LatLng(new LatLng(Double.valueOf(establishment.getLocation().getLatitude()),Double.valueOf(establishment.getLocation().getLongitude())));
-                                addMarker(mapboxMap,latLngEstablishment,establishment.getName());
+                                addMarker(MapActivity.this.nMapboxmap,latLngEstablishment,establishment.getName());
                             }
                         }else {
                             Log.d("API REST",response.errorBody().toString());
@@ -290,7 +292,9 @@ public class MapActivity extends AppCompatActivity {
 
             }
 
-        });
+                             });
+
+
 
 
     }
