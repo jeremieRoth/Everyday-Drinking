@@ -37,5 +37,5 @@ public interface EstablishmentService {
     @PUT("establishment")
     Call<Establishment> editEstablishment(@Header("Authorization")String authHeader,
                                  @Field("name") String login,
-                                 @Field("location")String password);
+                                 @Field("location")int location);
 }
