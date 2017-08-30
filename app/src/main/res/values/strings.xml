@@ -10,4 +10,8 @@
     <string name="test">test</string>
     <string name="add_drink_btn">ajouter une boisson</string>
     <string name="add_comment_btn">+ comment</string>
+    <string name="map_box_id">pk.eyJ1IjoiamVyZW1pZTAwMCIsImEiOiJjajZtbmQxNWQyaHVvMzNueW4wa2k0ejJtIn0.KlQLHwiDKhXCI3gobANT9Q</string>
+    <string name="event_title">Evenement</string>
+    <string name="add_event_btn">+ event</string>
+
 </resources>

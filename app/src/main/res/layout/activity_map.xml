@@ -4,14 +4,14 @@
     xmlns:mapbox="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.gilian.bars_coop.services.MapActivity">
+    tools:context="com.example.gilian.bars_coop.MapActivity">
 
 
 
     <com.mapbox.mapboxsdk.maps.MapView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/mapquestMapView"
+        android:id="@+id/mapBoxMapView"
         mapbox:mapbox_styleUrl="@string/mapbox_style_mapbox_streets" />
 
 </LinearLayout>

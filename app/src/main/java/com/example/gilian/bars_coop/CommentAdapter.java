@@ -1,4 +1,4 @@
-package com.example.gilian.bars_coop.services;
+package com.example.gilian.bars_coop;
 
 import android.app.Activity;
 import android.support.annotation.NonNull;

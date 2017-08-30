@@ -1,4 +1,4 @@
-package com.example.gilian.bars_coop.services;
+package com.example.gilian.bars_coop;
 
 import android.Manifest;
 import android.content.Context;
@@ -19,7 +19,11 @@ import android.os.Build;
 
 import com.example.gilian.bars_coop.Entity.Comment;
 import com.example.gilian.bars_coop.Entity.Establishment;
-import com.example.gilian.bars_coop.MainActivity;
+import com.example.gilian.bars_coop.Entity.Event;
+import com.example.gilian.bars_coop.services.CommentService;
+import com.example.gilian.bars_coop.services.EstablishmentService;
+import com.example.gilian.bars_coop.services.EventService;
+import com.example.gilian.bars_coop.services.LocationService;
 import com.mapbox.mapboxsdk.Mapbox;
 import com.mapbox.mapboxsdk.annotations.Marker;
 import com.mapbox.mapboxsdk.annotations.MarkerOptions;
@@ -29,7 +33,6 @@ import com.mapbox.mapboxsdk.geometry.LatLng;
 
 
 import com.example.gilian.bars_coop.Entity.User;
-import com.example.gilian.bars_coop.R;
 import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
@@ -37,7 +40,6 @@ import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import okhttp3.OkHttpClient;
 import retrofit2.Call;
@@ -62,6 +64,7 @@ public class MapActivity extends AppCompatActivity {
     private LocationManager lm;
     public List<Establishment> establishmentList;
     public List<Comment> commentList;
+    public List<Event> eventList;
 
     public String name;
 
@@ -73,10 +76,11 @@ public class MapActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //MapQuestAccountManager.start(getApplicationContext());
-        Mapbox.getInstance(getApplicationContext(),"pk.eyJ1IjoiamVyZW1pZTAwMCIsImEiOiJjajZtbmQxNWQyaHVvMzNueW4wa2k0ejJtIn0.KlQLHwiDKhXCI3gobANT9Q");
+        //getResources().getString
+        Mapbox.getInstance(getApplicationContext(),getResources().getString(R.string.map_box_id));
         setContentView(R.layout.activity_map);
 
-        mMapView = (MapView) findViewById(R.id.mapquestMapView);
+        mMapView = (MapView) findViewById(R.id.mapBoxMapView);
         mMapView.onCreate(savedInstanceState);
         lm= (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
         authHeader = "Basic " + Base64.encodeToString(base.getBytes(), Base64.NO_WRAP);
@@ -257,9 +261,37 @@ public class MapActivity extends AppCompatActivity {
                                                 }
 
                                             }
+                                            getEvent().enqueue(new Callback<List<Event>>() {
+                                                @Override
+                                                public void onResponse(Call<List<Event>> call, Response<List<Event>> response) {
+                                                    if (response.isSuccessful()){
+                                                        MapActivity.this.eventList = response.body();
+                                                        Iterator itr = MapActivity.this.eventList.iterator();
+                                                        while (itr.hasNext()){
+                                                            Event event = (Event) itr.next();
+                                                            if(event.getEstablishment().getId() != MapActivity.this.establishmentSave.getId()){
+                                                                itr.remove();
+                                                            }
+                                                        }
 
-                                            EstablishmentDialog establishmentDialog = new EstablishmentDialog(MapActivity.this, MapActivity.this.establishmentSave, MapActivity.this.commentList,MapActivity.this);
-                                            establishmentDialog.show();
+                                                        EstablishmentDialog establishmentDialog = new EstablishmentDialog(MapActivity.this, MapActivity.this.establishmentSave, MapActivity.this.commentList, MapActivity.this.eventList,MapActivity.this);
+                                                        establishmentDialog.show();
+
+                                                    }else {
+                                                        Log.d("API REST not successful", "event not successful");
+
+                                                        Toast.makeText(MapActivity.this, "getEvent Failure", Toast.LENGTH_SHORT).show();
+                                                    }
+                                                }
+
+                                                @Override
+                                                public void onFailure(Call<List<Event>> call, Throwable t) {
+                                                    Log.d("API REST FAILURE", "event Sa fonctionne pas");
+                                                    Log.d("API REST FAILURE", t.toString());
+                                                    Toast.makeText(MapActivity.this, "getEvent Failure", Toast.LENGTH_SHORT).show();
+                                                }
+                                            });
+
                                             Log.d("API REST successful", "Comment is successful ");
                                         } else {
                                             Log.d("API REST not successful", "Comment not successful");
@@ -327,8 +359,8 @@ public class MapActivity extends AppCompatActivity {
     public void initRetrofit()//Initialise retrofit obligatoire pour effectuer une requette
     {
         Retrofit.Builder builder = new Retrofit.Builder()
-                .baseUrl("http://gilian.ddns.net/git/api_EverydayDrinking/web/")
                 //.baseUrl("http://gilian.ddns.net/git/api_EverydayDrinking/web/")
+                .baseUrl("http://gilian.ddns.net/git/api_EverydayDrinking/web/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(httpClient.build());
 
@@ -346,10 +378,18 @@ public class MapActivity extends AppCompatActivity {
         return call;
     }
 
+
     public Call<List<Comment>> getComment(){
         CommentService commentService = retrofit.create(CommentService.class);
 
         Call<List<Comment>> listCall =commentService.getComments(authHeader);
+
+        return listCall;
+    }
+    public Call<List<Event>> getEvent() {
+        EventService eventService = retrofit.create(EventService.class);
+
+        Call<List<Event>> listCall = eventService.getEvents(authHeader);
 
         return listCall;
     }

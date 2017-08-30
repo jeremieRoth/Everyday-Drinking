@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:layout_width="match_parent"
+    android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:id="@+id/name_comment"
+        android:id="@+id/event_title"
         android:textColor="@color/white"
+        android:text="@string/event_title"
         android:background="@color/colorPrimary"
         android:gravity="center"
         android:paddingRight="10dp"
@@ -17,9 +17,9 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:id="@+id/body_comment"
+        android:id="@+id/body_event"
         android:gravity="center"
-        android:layout_toRightOf="@id/name_comment"
+        android:layout_toRightOf="@id/event_title"
         />
 
 </RelativeLayout>

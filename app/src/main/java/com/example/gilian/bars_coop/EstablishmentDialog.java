@@ -1,6 +1,5 @@
-package com.example.gilian.bars_coop.services;
+package com.example.gilian.bars_coop;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -10,7 +9,7 @@ import android.widget.TextView;
 
 import com.example.gilian.bars_coop.Entity.Comment;
 import com.example.gilian.bars_coop.Entity.Establishment;
-import com.example.gilian.bars_coop.R;
+import com.example.gilian.bars_coop.Entity.Event;
 
 import java.util.List;
 
@@ -20,27 +19,32 @@ import java.util.List;
 
 public class EstablishmentDialog extends Dialog {
     TextView barName;
-    GridView drinkGrid;
+    GridView eventGrid;
     GridView commentGrid;
-    Button addDrink;
+    Button addevent;
     Button addComment;
     List<Comment> commentList;
+    List<Event> eventList;
 
 
 
-    public EstablishmentDialog(@NonNull Context context, Establishment establishment, List<Comment> commentList, MapActivity activity) {
+    public EstablishmentDialog(@NonNull Context context, Establishment establishment, List<Comment> commentList, List<Event> eventList, MapActivity activity) {
         super(context);
         this.setContentView(R.layout.establishment_dialog);
         barName = (TextView) findViewById(R.id.name_establishment);
-        //drinkGrid = (GridView) findViewById(R.id.drink_grid);
+        eventGrid = (GridView) findViewById(R.id.event_grid);
         commentGrid = (GridView) findViewById(R.id.comment_grid);
-        //addDrink = (Button) findViewById(R.id.add_drink);
+        addevent = (Button) findViewById(R.id.add_event);
         addComment = (Button) findViewById(R.id.add_comment);
-        this.commentList=commentList;
+        this.commentList = commentList;
+        this.eventList = eventList;
         barName.setText(establishment.getName());
 
+        EventAdapter eventAdapter = new EventAdapter(activity, R.layout.item_event, eventList);
         CommentAdapter commentAdapter = new CommentAdapter(activity, R.layout.item_comment, commentList);
+        eventGrid.setAdapter(eventAdapter);
         commentGrid.setAdapter(commentAdapter);
+
     }
 
     public TextView getBarName() {
@@ -51,28 +55,12 @@ public class EstablishmentDialog extends Dialog {
         this.barName = barName;
     }
 
-    public GridView getDrinkGrid() {
-        return drinkGrid;
-    }
-
-    public void setDrinkGrid(GridView drinkGrid) {
-        this.drinkGrid = drinkGrid;
-    }
-
     public GridView getCommentGrid() {
         return commentGrid;
     }
 
     public void setCommentGrid(GridView commentGrid) {
         this.commentGrid = commentGrid;
-    }
-
-    public Button getAddDrink() {
-        return addDrink;
-    }
-
-    public void setAddDrink(Button addDrink) {
-        this.addDrink = addDrink;
     }
 
     public Button getAddComment() {
@@ -89,5 +77,21 @@ public class EstablishmentDialog extends Dialog {
 
     public void setCommentList(List<Comment> commentList) {
         this.commentList = commentList;
+    }
+
+    public GridView getEventGrid() {
+        return eventGrid;
+    }
+
+    public void setEventGrid(GridView eventGrid) {
+        this.eventGrid = eventGrid;
+    }
+
+    public Button getAddevent() {
+        return addevent;
+    }
+
+    public void setAddevent(Button addevent) {
+        this.addevent = addevent;
     }
 }

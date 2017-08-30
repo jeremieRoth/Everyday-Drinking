@@ -8,20 +8,12 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Base64;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
 
 import com.example.gilian.bars_coop.Entity.User;
-import com.example.gilian.bars_coop.Entity.Establishment;
-import com.example.gilian.bars_coop.services.CommentService;
-import com.example.gilian.bars_coop.services.DrinkService;
-import com.example.gilian.bars_coop.services.EstablishmentService;
-import com.example.gilian.bars_coop.services.LocationService;
 import com.example.gilian.bars_coop.services.UserService;
-import com.example.gilian.bars_coop.services.MapActivity;
-import com.mapbox.mapboxsdk.Mapbox;
 
 
 import okhttp3.OkHttpClient;
@@ -30,8 +22,6 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
-
-import static android.R.attr.permission;
 
 public class MainActivity extends AppCompatActivity {
 
