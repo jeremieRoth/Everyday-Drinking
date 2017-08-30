@@ -1,7 +1,6 @@
 package com.example.gilian.bars_coop.services;
 
 import android.Manifest;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -10,7 +9,6 @@ import android.location.LocationManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresPermission;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Base64;
@@ -21,12 +19,11 @@ import android.os.Build;
 
 import com.example.gilian.bars_coop.Entity.Comment;
 import com.example.gilian.bars_coop.Entity.Establishment;
-import com.example.gilian.bars_coop.services.Exemples.EstablishmentDialog;
+import com.example.gilian.bars_coop.MainActivity;
 import com.mapbox.mapboxsdk.annotations.Marker;
 import com.mapbox.mapboxsdk.annotations.MarkerOptions;
 import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
 import com.mapbox.mapboxsdk.geometry.LatLng;
-import com.mapbox.mapboxsdk.location.LocationListener;
 import com.mapquest.mapping.MapQuestAccountManager;
 import com.mapquest.mapping.maps.OnMapReadyCallback;
 import com.mapquest.mapping.maps.MapboxMap;
@@ -37,7 +34,9 @@ import com.example.gilian.bars_coop.Entity.User;
 import com.example.gilian.bars_coop.R;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import okhttp3.OkHttpClient;
 import retrofit2.Call;
@@ -45,9 +44,6 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
-
-import static android.R.attr.drawable;
-import static android.R.attr.permission;
 
 public class MapActivity extends AppCompatActivity {
     private String login = "jixalas" ;
@@ -63,9 +59,12 @@ public class MapActivity extends AppCompatActivity {
     private MapView mMapView;
     private MapboxMap nMapboxmap;
     private LocationManager lm;
-    private List<Establishment> establishmentList;
+    public List<Establishment> establishmentList;
+    public List<Comment> commentList;
 
     public String name;
+
+    Establishment establishmentSave;
 
 
     @Override
@@ -91,6 +90,7 @@ public class MapActivity extends AppCompatActivity {
                 nMapboxmap=mapboxMap;
                 if ( Build.VERSION.SDK_INT >= 23 &&
                         ContextCompat.checkSelfPermission( MapActivity.this, android.Manifest.permission.ACCESS_FINE_LOCATION ) != PackageManager.PERMISSION_GRANTED &&
+                        //ContextCompat.checkSelfPermission( MapActivity.this, android.Manifest.permission.INTERNET) != PackageManager.PERMISSION_GRANTED &&
                         ContextCompat.checkSelfPermission( MapActivity.this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                     return  ;
                 }
@@ -111,7 +111,7 @@ public class MapActivity extends AppCompatActivity {
                     public void onLocationChanged(Location location) {
                         //Log.d("GPS","longitude : "+location.getLongitude()+"latitude : "+location.getLatitude() );
 
-                        nMapboxmap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()),14));
+                        nMapboxmap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()),10));
                     }
 
                     @Override
@@ -224,6 +224,7 @@ public class MapActivity extends AppCompatActivity {
                     public void onFailure(Call<List<Establishment>> call, Throwable t) {
                         Log.d("API REST","Establishment Sa fonctionne pas");
                         Log.d("API REST",t.toString());
+
                     }
                 });
 
@@ -233,15 +234,49 @@ public class MapActivity extends AppCompatActivity {
                         //Toast.makeText(MapActivity.this, "window click", Toast.LENGTH_SHORT).show();
                         if(MapActivity.this.establishmentList!=null){
                             String name = marker.getTitle();
-                            Establishment establishmentRecup=null;
+                            establishmentSave=null;
                             for (Establishment establishment: MapActivity.this.establishmentList){
                                 if(establishment.getName().equals(name)){
-                                    establishmentRecup=establishment;
+                                    establishmentSave=establishment;
                                 }
                             }
+                            if(establishmentSave!=null) {
 
-                            EstablishmentDialog establishmentDialog = new EstablishmentDialog(MapActivity.this,establishmentRecup);
-                            establishmentDialog.show();
+                                getComment().enqueue(new Callback<List<Comment>>() {
+                                    @Override
+                                    public void onResponse(Call<List<Comment>> call, Response<List<Comment>> response) {
+                                        if (response.isSuccessful()) {
+                                            MapActivity.this.commentList = response.body();
+                                            Iterator itr = MapActivity.this.commentList.iterator();
+                                            while (itr.hasNext()){
+                                                Comment comment = (Comment) itr.next();
+                                                if(comment.getEstablishment().getId()!=MapActivity.this.establishmentSave.getId()){
+                                                    itr.remove();
+                                                }
+
+                                            }
+
+                                            EstablishmentDialog establishmentDialog = new EstablishmentDialog(MapActivity.this, MapActivity.this.establishmentSave, MapActivity.this.commentList,MapActivity.this);
+                                            establishmentDialog.show();
+                                            Log.d("API REST successful", "Comment is successful ");
+                                        } else {
+                                            Log.d("API REST not successful", "Comment not successful");
+
+                                            Toast.makeText(MapActivity.this, "getComment Failure", Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onFailure(Call<List<Comment>> call, Throwable t) {
+                                        Log.d("API REST FAILURE", "Comment Sa fonctionne pas");
+                                        Log.d("API REST FAILURE", t.toString());
+                                        Toast.makeText(MapActivity.this, "getComment Failure", Toast.LENGTH_SHORT).show();
+
+                                    }
+                                });
+                            }
+                            //EstablishmentDialog establishmentDialog = new EstablishmentDialog(MapActivity.this,establishmentRecup);
+                            //establishmentDialog.show();
                         }else {
                             Toast.makeText(MapActivity.this, "Base de donnée inaccessible", Toast.LENGTH_SHORT).show();
                         }
@@ -289,6 +324,7 @@ public class MapActivity extends AppCompatActivity {
     {
         Retrofit.Builder builder = new Retrofit.Builder()
                 .baseUrl("http://192.168.0.16/api_EverydayDrinking/web/")
+                //.baseUrl("http://gilian.ddns.net/git/api_EverydayDrinking/web/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(httpClient.build());
 
@@ -332,12 +368,15 @@ public class MapActivity extends AppCompatActivity {
                     establishmentCall.enqueue(new Callback<Establishment>() {
                         @Override
                         public void onResponse(Call<Establishment> call, Response<Establishment> response) {
+                            Log.d("testCalEsthablisement","pre bool");
                             if(response.isSuccessful()){
+                                Log.d("testCalEsthablisement","post bool");
                                 Establishment establishment= response.body();
                                 self.establishmentList.add(establishment);
                                 LatLng latLngEstha = new LatLng(Double.valueOf(establishment.getLocation().getLatitude()),Double.valueOf(establishment.getLocation().getLongitude()));
                                 self.addMarker(self.nMapboxmap,latLngEstha,establishment.getName());
                             }else {
+                                Log.d("testCalEsthablisement","post 2 bool");
                                 Toast.makeText(MapActivity.this, "Base de donnée inaccessibleEsth", Toast.LENGTH_SHORT).show();
                             }
                         }

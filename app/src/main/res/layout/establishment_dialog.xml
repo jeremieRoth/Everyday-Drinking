@@ -3,10 +3,10 @@
     android:orientation="vertical" android:layout_width="wrap_content"
     android:layout_height="wrap_content">
     <TextView
-        android:layout_width="match_parent"
+        android:layout_width="2in"
         android:layout_height="64dp"
         android:text="@string/title_establishment"
-        android:textSize="20dp"
+        android:textSize="20sp"
         android:textColor="@color/white"
         android:gravity="center"
         android:background="@color/colorPrimary"/>
@@ -17,27 +17,28 @@
         android:id="@+id/name_establishment"
         android:text="@string/test"
         android:gravity="center"/>
-    <Button
+    <!--<Button
         android:layout_marginTop="10dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/add_drink"
         android:text="@string/add_drink_btn"/>
-    <!--<GridLayout
+    <GridLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/drink_grid"
-        android:columnCount="2"></GridLayout>
+        android:columnCount="2"></GridLayout>-->
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/add_comment"/>
-    <GridLayout
+        android:id="@+id/add_comment"
+        android:layout_gravity="center"
+        android:text="@string/add_comment_btn"/>
+    <GridView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/comment_grid"
-
-        android:columnCount="1"></GridLayout>-->
+        android:columnCount="1"></GridView>
 
 </LinearLayout>

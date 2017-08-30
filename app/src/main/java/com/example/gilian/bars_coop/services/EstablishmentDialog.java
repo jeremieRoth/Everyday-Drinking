@@ -1,5 +1,6 @@
-package com.example.gilian.bars_coop.services.Exemples;
+package com.example.gilian.bars_coop.services;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -7,8 +8,11 @@ import android.widget.Button;
 import android.widget.GridView;
 import android.widget.TextView;
 
+import com.example.gilian.bars_coop.Entity.Comment;
 import com.example.gilian.bars_coop.Entity.Establishment;
 import com.example.gilian.bars_coop.R;
+
+import java.util.List;
 
 /**
  * Created by JérémieRoth on 27/08/2017.
@@ -20,17 +24,23 @@ public class EstablishmentDialog extends Dialog {
     GridView commentGrid;
     Button addDrink;
     Button addComment;
+    List<Comment> commentList;
 
-    public EstablishmentDialog(@NonNull Context context, Establishment establishment) {
+
+
+    public EstablishmentDialog(@NonNull Context context, Establishment establishment, List<Comment> commentList, MapActivity activity) {
         super(context);
         this.setContentView(R.layout.establishment_dialog);
         barName = (TextView) findViewById(R.id.name_establishment);
         //drinkGrid = (GridView) findViewById(R.id.drink_grid);
-        //commentGrid = (GridView) findViewById(R.id.comment_grid);
-        addDrink = (Button) findViewById(R.id.add_drink);
-        //addComment = (Button) findViewById(R.id.add_comment);
-
+        commentGrid = (GridView) findViewById(R.id.comment_grid);
+        //addDrink = (Button) findViewById(R.id.add_drink);
+        addComment = (Button) findViewById(R.id.add_comment);
+        this.commentList=commentList;
         barName.setText(establishment.getName());
+
+        CommentAdapter commentAdapter = new CommentAdapter(activity, R.layout.item_comment, commentList);
+        commentGrid.setAdapter(commentAdapter);
     }
 
     public TextView getBarName() {
@@ -71,5 +81,13 @@ public class EstablishmentDialog extends Dialog {
 
     public void setAddComment(Button addComment) {
         this.addComment = addComment;
+    }
+
+    public List<Comment> getCommentList() {
+        return commentList;
+    }
+
+    public void setCommentList(List<Comment> commentList) {
+        this.commentList = commentList;
     }
 }
