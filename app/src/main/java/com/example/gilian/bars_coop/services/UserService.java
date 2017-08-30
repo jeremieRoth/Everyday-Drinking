@@ -38,6 +38,7 @@ public interface UserService
     @FormUrlEncoded
     @PUT("user/{id}")
     Call<User> editUser(@Header("Authorization")String authHeader,
+                        @Path("id") int id,
                         @Field("login") String login,
                         @Field("password")String password,
                         @Field("username")String username);

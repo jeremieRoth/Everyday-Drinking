@@ -97,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
     public void initRetrofit()//Initialise retrofit obligatoire pour effectuer une requette
     {
         Retrofit.Builder builder = new Retrofit.Builder()
-                .baseUrl("http://192.168.0.16/api_EverydayDrinking/web/")
+                .baseUrl("http://gilian.ddns.net/git/api_EverydayDrinking/web/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(httpClient.build());
 

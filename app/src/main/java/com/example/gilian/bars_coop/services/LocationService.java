@@ -34,7 +34,7 @@ public interface LocationService {
                            @Field("longitude") float longitude,
                            @Field("latitude")float latitude);
     @FormUrlEncoded
-    @PUT("location")
+    @PUT("location/{id}")
     Call<Location> editLocation(@Header("Authorization")String authHeader,
                             @Field("longitude") float login,
                             @Field("latitude") float password);
