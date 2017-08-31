@@ -43,6 +43,11 @@ public interface UserService
                         @Field("password")String password,
                         @Field("username")String username);
 
+    @GET("user/{login}/{password}")
+    Call<User> getUserByLoginAndPassword(@Header("Authorization")String authHeader,
+                                         @Path("login") String login,
+                                         @Path("password")String password);
+
 
 
 

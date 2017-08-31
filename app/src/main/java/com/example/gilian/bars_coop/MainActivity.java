@@ -10,7 +10,9 @@ import android.os.Bundle;
 import android.util.Base64;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.example.gilian.bars_coop.Entity.User;
 import com.example.gilian.bars_coop.services.UserService;
@@ -32,6 +34,9 @@ public class MainActivity extends AppCompatActivity {
     private String base = login + ":" + motDePasse;
     private String authHeader;
 
+    private EditText loginA;
+    private EditText password;
+
     private Retrofit retrofit;
 
     private User user;
@@ -45,16 +50,19 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         if ( ContextCompat.checkSelfPermission( this, android.Manifest.permission.ACCESS_COARSE_LOCATION ) != PackageManager.PERMISSION_GRANTED ) {
 
-            ActivityCompat.requestPermissions( this, new String[] {  android.Manifest.permission.ACCESS_COARSE_LOCATION  },
-                    99 );
-        }
-        //Récupère les droits pour les version récentes d'android.
-        int internetPermission = ContextCompat.checkSelfPermission(this, Manifest.permission.INTERNET);
-        if(ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.INTERNET)){
-
         }else{
-            //ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.INTERNET}, permission);
+            
         }
+            loginA = (EditText) findViewById(R.id.login);
+            password = (EditText) findViewById(R.id.password);
+
+            //Récupère les droits pour les version récentes d'android.
+            int internetPermission = ContextCompat.checkSelfPermission(this, Manifest.permission.INTERNET);
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.INTERNET)) {
+
+            } else {
+                //ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.INTERNET}, permission);
+            }
 /*        int writePermission = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
         if(ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)){
 
@@ -62,59 +70,54 @@ public class MainActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, permission);
         }*/
 
-        initRetrofit();//Initialise retrofit pour accéder à l'API
-        this.getUser(1);
-        Button loginButton = (Button) findViewById(R.id.btnlogin);
-        loginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent =new Intent(MainActivity.this, MapActivity.class);
-                Bundle extra = new Bundle();
-                User user =new User();
-                user.setId(1);
-                user.setLogin("111");
-                user.setPassword("azerty");
-                user.setUsername("vador");
-                //extra.putString("user", "vador");
-                extra.putParcelable("user", user);
-                intent.putExtras(extra);
-                startActivity(intent);
+            Button log_up = (Button) findViewById(R.id.btnInscription);
+
+            log_up.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(MainActivity.this, SignUpActivity.class);
+                    startActivity(intent);
 
 
-            }
-        });
-
+                }
+            });
 
     }
     public void initRetrofit()//Initialise retrofit obligatoire pour effectuer une requette
     {
         Retrofit.Builder builder = new Retrofit.Builder()
-                .baseUrl("http://gilian.ddns.net/git/api_EverydayDrinking/web/")
+                .baseUrl("http://192.168.1.254/git/api_EverydayDrinking/web/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(httpClient.build());
 
-        retrofit = builder.build();
+        this.retrofit = builder.build();
 
 
     }
-    public void getUser(int id)
+    public void checkLogin(View log)
+    {
+        this.initRetrofit();
+        this.getUserByLoginAndPassword(this.loginA.getText().toString(),this.password.getText().toString());
+    }
+    public void getUserByLoginAndPassword(String login, String password)
     {
         UserService userService = retrofit.create(UserService.class);
-        authHeader = "Basic " + Base64.encodeToString(base.getBytes(), Base64.NO_WRAP);
-        Call<User> call = userService.getUser(authHeader,id);
+        authHeader = "Basic " + Base64.encodeToString(this.base.getBytes(), Base64.NO_WRAP);
+        Call<User> call = userService.getUserByLoginAndPassword(authHeader,login, password);
 
-        final MainActivity self = this;//permet d'acceder aux variable de la classe DrinkExemple dans le callback (this ne fonctionne pas dans le callback)
+        //final UserExemple self = this;//permet d'acceder aux variable de la classe DrinkExemple dans le callback (this ne fonctionne pas dans le callback)
         call.enqueue(new Callback<User>() {
 
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
                 if (response.isSuccessful()) {
-                    System.out.println("User Sa fonctionne");
-                    User user = response.body();
-                    self.user = user;
-                    System.out.println(user.getId());
+                    Intent intent =new Intent(MainActivity.this, SignUpActivity.class);
+                    startActivity(intent);
+
+
+                    //self.user = user;
                 }else{
-                    System.out.println(response.errorBody());
+                    Toast.makeText(MainActivity.this, "Utilisateur ou mot de passe incorrect", Toast.LENGTH_SHORT).show();
                 }
             }
             @Override
@@ -127,5 +130,6 @@ public class MainActivity extends AppCompatActivity {
         });
 
     }
+
 
 }

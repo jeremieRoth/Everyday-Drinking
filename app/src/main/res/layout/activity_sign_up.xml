@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:background="#FF69B4">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/log_up"
+        android:textStyle="bold"
+        android:textSize="30dp"
+        android:textColor="#00FF00"
+        android:id="@+id/log_up"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="108dp"
+        android:layout_marginTop="38dp" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/login"
+        android:id="@+id/login"
+        android:layout_marginTop="31dp"
+        android:layout_below="@+id/log_up"
+        android:layout_alignParentStart="true" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/name"
+        android:id="@+id/name"
+        android:layout_marginTop="26dp"
+        android:layout_below="@+id/login"
+        android:layout_alignParentStart="true" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/firstname"
+        android:id="@+id/firstname"
+        android:layout_below="@+id/name"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="25dp" />
+
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/mdp"
+        android:id="@+id/password"
+        android:layout_marginTop="27dp"
+        android:layout_below="@+id/firstname"
+        android:layout_alignParentStart="true" />
+
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/Verifmdp"
+        android:id="@+id/verifpassword"
+        android:layout_below="@+id/password"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="35dp" />
+
+    <Button
+        android:onClick="inscription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/btnInscription"
+        android:text="@string/btn_Inscrit"
+        android:layout_marginTop="14dp"
+        android:layout_below="@+id/verifpassword"
+        android:layout_centerHorizontal="true" />
+
+</RelativeLayout>
