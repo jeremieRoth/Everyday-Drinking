@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="match_parent"
-    android:background="#FF69B4">
+    ><!-- android:background="#FF69B4" -->
 
     <TextView
         android:layout_width="wrap_content"
@@ -9,12 +9,11 @@
         android:text="@string/log_up"
         android:textStyle="bold"
         android:textSize="30dp"
-        android:textColor="#00FF00"
         android:id="@+id/log_up"
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true"
         android:layout_marginStart="108dp"
-        android:layout_marginTop="38dp" />
+        android:layout_marginTop="38dp" /><!--  android:textColor="#00FF00"-->
 
     <EditText
         android:layout_width="match_parent"
@@ -63,14 +62,27 @@
         android:layout_alignParentStart="true"
         android:layout_marginTop="35dp" />
 
-    <Button
-        android:onClick="inscription"
-        android:layout_width="wrap_content"
+    <GridLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/btnInscription"
-        android:text="@string/btn_Inscrit"
-        android:layout_marginTop="14dp"
-        android:layout_below="@+id/verifpassword"
-        android:layout_centerHorizontal="true" />
+        android:layout_alignParentBottom="true">
+        <Button
+            android:onClick="inscription"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/btnInscription"
+            android:text="@string/btn_Inscrit"
+            android:layout_marginTop="14dp"
+            android:layout_below="@+id/verifpassword"
+            android:layout_centerHorizontal="true" />
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Retour"
+            android:id="@+id/btnReturn"
+
+            />
+    </GridLayout>
+
 
 </RelativeLayout>

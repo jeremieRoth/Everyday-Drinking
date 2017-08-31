@@ -111,7 +111,11 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
                 if (response.isSuccessful()) {
-                    Intent intent =new Intent(MainActivity.this, SignUpActivity.class);
+                    Intent intent =new Intent(MainActivity.this, MapActivity.class);
+                    Bundle extra = new Bundle();
+                    User user = response.body();
+                    extra.putParcelable("user", user);
+                    intent.putExtras(extra);
                     startActivity(intent);
 
 
