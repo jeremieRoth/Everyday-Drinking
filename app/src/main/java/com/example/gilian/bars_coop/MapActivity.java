@@ -67,8 +67,15 @@ public class MapActivity extends AppCompatActivity {
     public List<Event> eventList;
 
     public String name;
+//    public String comment;
+//    public String event;
 
     Establishment establishmentSave;
+    AddCommentDialog addCommentDialog;
+    AddEventDialog addEventDialog;
+    AddEstablishmentDialog addEstablishmentDialog;
+    EstablishmentDialog establishmentDialog;
+    LatLng latLngStock;
 
 
     @Override
@@ -88,6 +95,7 @@ public class MapActivity extends AppCompatActivity {
         Bundle extra = intent.getExtras();
         user = (User) extra.getParcelable("user");
 
+
         //getMapOnMapReadyCallback
         mMapView.getMapAsync(new OnMapReadyCallback() {
             @Override
@@ -105,7 +113,7 @@ public class MapActivity extends AppCompatActivity {
                     Toast.makeText(MapActivity.this, "GPS activer ", Toast.LENGTH_SHORT).show();
                     Location location= lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
                     Log.d("GPSBis","longitude : "+location.getLongitude()+"latitude : "+location.getLatitude() );
-                    //nMapboxmap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()),14));
+                    nMapboxmap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()),10));
                 }else {
                     //nMapboxmap.setMyLocationEnabled(false);
                     Toast.makeText(MapActivity.this, "GPS desactiver ", Toast.LENGTH_SHORT).show();
@@ -147,11 +155,11 @@ public class MapActivity extends AppCompatActivity {
 
                 nMapboxmap.setOnMapClickListener(new com.mapbox.mapboxsdk.maps.MapboxMap.OnMapClickListener() {
                     @Override
-                    public void onMapClick(@NonNull final LatLng latLng) {
+                    public void onMapClick(@NonNull  LatLng latLng) {
                         //Toast.makeText(MapActivity.this, "Click latitude : "+latLng.getLatitude()+" longitude : "+latLng.getLongitude() , Toast.LENGTH_SHORT).show();
-
+                        MapActivity.this.latLngStock =latLng;
                         Log.d("LongPress", "latitude : "+latLng.getLatitude()+" longitude : "+latLng.getLongitude());
-                        final AddEstablishmentDialog addEstablishmentDialog=new AddEstablishmentDialog(MapActivity.this);
+                        MapActivity.this.addEstablishmentDialog=new AddEstablishmentDialog(MapActivity.this);
                         addEstablishmentDialog.getCancelButton().setOnClickListener(new View.OnClickListener() {
 
                             @Override
@@ -179,7 +187,7 @@ public class MapActivity extends AppCompatActivity {
                                 if(name!="" && nameUsed==false){
                                     Toast.makeText(MapActivity.this, "Click ok, Bar:"+name, Toast.LENGTH_SHORT).show();
 
-                                    postEstablishment(name,latLng.getLongitude(),latLng.getLatitude());
+                                    postEstablishment(name,latLngStock.getLongitude(),latLngStock.getLatitude());
 
                                 }
                                 else{
@@ -274,7 +282,74 @@ public class MapActivity extends AppCompatActivity {
                                                             }
                                                         }
 
-                                                        EstablishmentDialog establishmentDialog = new EstablishmentDialog(MapActivity.this, MapActivity.this.establishmentSave, MapActivity.this.commentList, MapActivity.this.eventList,MapActivity.this);
+                                                        MapActivity.this.establishmentDialog = new EstablishmentDialog(MapActivity.this.establishmentSave, MapActivity.this.commentList, MapActivity.this.eventList,MapActivity.this);
+
+                                                        establishmentDialog.getAddComment().setOnClickListener(new View.OnClickListener() {
+                                                            @Override
+                                                            public void onClick(View view) {
+                                                                MapActivity.this.addCommentDialog = new AddCommentDialog(MapActivity.this);
+                                                                addCommentDialog.getOkButton().setOnClickListener(new View.OnClickListener() {
+                                                                    @Override
+                                                                    public void onClick(View view) {
+                                                                        String comment = String.valueOf(MapActivity.this.addCommentDialog.getCommentTxt().getText());
+                                                                        if (comment !=""){
+                                                                            //Toast.makeText(MapActivity.this, comment, Toast.LENGTH_SHORT).show();
+                                                                            postComment(comment,establishmentSave);
+                                                                            addCommentDialog.hide();
+
+                                                                        }else {
+                                                                            Toast.makeText(MapActivity.this, "vide", Toast.LENGTH_SHORT).show();
+                                                                        }
+
+
+
+                                                                    }
+                                                                });
+                                                                addCommentDialog.getCancelButton().setOnClickListener(new View.OnClickListener() {
+                                                                    @Override
+                                                                    public void onClick(View view) {
+                                                                        addCommentDialog.hide();
+                                                                    }
+                                                                });
+
+                                                                addCommentDialog.show();
+
+                                                            }
+                                                        });
+
+                                                        establishmentDialog.getAddevent().setOnClickListener(new View.OnClickListener() {
+                                                            @Override
+                                                            public void onClick(View view) {
+
+                                                                MapActivity.this.addEventDialog = new AddEventDialog(MapActivity.this);
+
+                                                                addEventDialog.getOkButton().setOnClickListener(new View.OnClickListener() {
+                                                                    @Override
+                                                                    public void onClick(View view) {
+                                                                        String eventText = String.valueOf(MapActivity.this.addEventDialog.getEventTxt().getText());
+                                                                        if(eventText != ""){
+                                                                            postEvent(eventText,establishmentSave);
+                                                                            addEventDialog.hide();
+                                                                        }else {
+                                                                            Toast.makeText(MapActivity.this, "vide", Toast.LENGTH_SHORT).show();
+                                                                        }
+                                                                    }
+                                                                });
+
+                                                                addEventDialog.getCancelButton().setOnClickListener(new View.OnClickListener() {
+                                                                    @Override
+                                                                    public void onClick(View view) {
+                                                                        addEventDialog.hide();
+                                                                    }
+                                                                });
+                                                                addEventDialog.show();
+                                                            }
+                                                        });
+
+
+
+
+
                                                         establishmentDialog.show();
 
                                                     }else {
@@ -360,7 +435,7 @@ public class MapActivity extends AppCompatActivity {
     {
         Retrofit.Builder builder = new Retrofit.Builder()
                 //.baseUrl("http://gilian.ddns.net/git/api_EverydayDrinking/web/")
-                .baseUrl("http://192.168.1.254/git/api_EverydayDrinking/web/")
+                .baseUrl("http://gilian.ddns.net/git/api_EverydayDrinking/web/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(httpClient.build());
 
@@ -393,12 +468,61 @@ public class MapActivity extends AppCompatActivity {
 
         return listCall;
     }
+    public void postEvent(String event, Establishment establishment){
+        EventService eventService = retrofit.create(EventService.class);
+        Log.d("PostEvent","event : "+event);
+       // this.event = event;
+        Call<Event> eventCall = eventService.addEvent(authHeader,event,establishment);
+
+        eventCall.enqueue(new Callback<Event>() {
+            @Override
+            public void onResponse(Call<Event> call, Response<Event> response) {
+                if(response.isSuccessful()){
+                    Event event1 = response.body();
+                    //MapActivity.this.establishmentDialog.updateEvent(event1);
+                }else{
+                    Log.d("responsEvent","response  not successful");
+                    Toast.makeText(MapActivity.this, "event not successful", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Event> call, Throwable t) {
+                Toast.makeText(MapActivity.this, "Base de donnée inaccessible event throw:"+t, Toast.LENGTH_SHORT).show();
+                Log.d("EventOnFailure","erreur "+t);
+            }
+        });
+    }
+    public void postComment(String comment, Establishment establishment){
+        CommentService commentService = retrofit.create(CommentService.class);
+        Log.d("PostComment","user : "+this.user.getLogin()+" comment : "+comment);
+        Call<Comment> commentCall = commentService.addComment(authHeader, comment, 5, this.user.getId(),establishment.getId());
+        commentCall.enqueue(new Callback<Comment>() {
+            @Override
+            public void onResponse(Call<Comment> call, Response<Comment> response) {
+                if(response.isSuccessful()){
+                    Comment comment1 = response.body();
+                    MapActivity.this.establishmentDialog.updateComment(comment1);
+
+                }else{
+                    Log.d("responsComment","response  not successful");
+                    Toast.makeText(MapActivity.this, "comment not successful", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Comment> call, Throwable t) {
+                Toast.makeText(MapActivity.this, "Base de donnée inaccessible comment throw: "+t, Toast.LENGTH_SHORT).show();
+                Log.d("CommentOnFailure","erreur "+t);
+            }
+        });
+    }
 
     public void postEstablishment(String name, Double longitude, Double latitude){
         LocationService locationService = retrofit.create(LocationService.class);
 
         //authHeader = "Basic " + Base64.encodeToString(base.getBytes(), Base64.NO_WRAP);
-        final MapActivity self=this;
+        //final MapActivity self=this;
         Log.d("PostCall","location: "+latitude+" "+longitude);
         this.name = name;
         Call<com.example.gilian.bars_coop.Entity.Location> locationCall = locationService.addLocation(authHeader,longitude.floatValue(),latitude.floatValue());
@@ -407,8 +531,8 @@ public class MapActivity extends AppCompatActivity {
             public void onResponse(Call<com.example.gilian.bars_coop.Entity.Location> call, Response<com.example.gilian.bars_coop.Entity.Location> response) {
                 if(response.isSuccessful()) {
                     com.example.gilian.bars_coop.Entity.Location location = response.body();
-                    EstablishmentService establishmentService = self.retrofit.create(EstablishmentService.class);
-                    Call<Establishment> establishmentCall = establishmentService.addEstablishment(self.authHeader,self.name,location.getId());
+                    EstablishmentService establishmentService = MapActivity.this.retrofit.create(EstablishmentService.class);
+                    Call<Establishment> establishmentCall = establishmentService.addEstablishment(MapActivity.this.authHeader,MapActivity.this.name,location.getId());
                     establishmentCall.enqueue(new Callback<Establishment>() {
                         @Override
                         public void onResponse(Call<Establishment> call, Response<Establishment> response) {
@@ -416,9 +540,9 @@ public class MapActivity extends AppCompatActivity {
                             if(response.isSuccessful()){
                                 Log.d("testCalEsthablisement","post bool");
                                 Establishment establishment= response.body();
-                                self.establishmentList.add(establishment);
+                                MapActivity.this.establishmentList.add(establishment);
                                 LatLng latLngEstha = new LatLng(Double.valueOf(establishment.getLocation().getLatitude()),Double.valueOf(establishment.getLocation().getLongitude()));
-                                self.addMarker(self.nMapboxmap,latLngEstha,establishment.getName());
+                                MapActivity.this.addMarker(MapActivity.this.nMapboxmap,latLngEstha,establishment.getName());
                             }else {
                                 Log.d("testCalEsthablisement","post 2 bool");
                                 Toast.makeText(MapActivity.this, "Base de donnée inaccessibleEsth", Toast.LENGTH_SHORT).show();
@@ -457,6 +581,8 @@ public class MapActivity extends AppCompatActivity {
         markerOptions.snippet(getResources().getString(R.string.marker_msg));
         mapboxMap.addMarker(markerOptions);
     }
+
+
 
 
 }

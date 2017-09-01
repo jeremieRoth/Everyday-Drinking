@@ -21,4 +21,8 @@
     <string name="name"> Nom</string>
     <string name="firstname"> Prenom </string>
     <string name="Verifmdp"> Confirmation du mot de passe</string>
+    <string name="title_add_comment">ajouter un commentaire</string>
+    <string name="title_add_event">ajouter un evenement</string>
+    <string name="hint_add_comment">comentaire</string>
+    <string name="hint_add_event">evenement</string>
 </resources>

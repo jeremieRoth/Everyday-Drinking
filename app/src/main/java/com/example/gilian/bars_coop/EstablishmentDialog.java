@@ -1,5 +1,6 @@
 package com.example.gilian.bars_coop;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -18,6 +19,7 @@ import java.util.List;
  */
 
 public class EstablishmentDialog extends Dialog {
+    Activity activity;
     TextView barName;
     GridView eventGrid;
     GridView commentGrid;
@@ -27,9 +29,9 @@ public class EstablishmentDialog extends Dialog {
     List<Event> eventList;
 
 
-
-    public EstablishmentDialog(@NonNull Context context, Establishment establishment, List<Comment> commentList, List<Event> eventList, MapActivity activity) {
-        super(context);
+    //public EstablishmentDialog(@NonNull Context context, Establishment establishment, List<Comment> commentList, List<Event> eventList, MapActivity activity) {
+    public EstablishmentDialog(Establishment establishment, List<Comment> commentList, List<Event> eventList, MapActivity activity) {
+        super(activity);
         this.setContentView(R.layout.establishment_dialog);
         barName = (TextView) findViewById(R.id.name_establishment);
         eventGrid = (GridView) findViewById(R.id.event_grid);
@@ -39,12 +41,24 @@ public class EstablishmentDialog extends Dialog {
         this.commentList = commentList;
         this.eventList = eventList;
         barName.setText(establishment.getName());
-
+        this.activity=activity;
         EventAdapter eventAdapter = new EventAdapter(activity, R.layout.item_event, eventList);
         CommentAdapter commentAdapter = new CommentAdapter(activity, R.layout.item_comment, commentList);
         eventGrid.setAdapter(eventAdapter);
         commentGrid.setAdapter(commentAdapter);
 
+    }
+
+    public void updateEvent(Event event){
+        eventList.add(event);
+        EventAdapter eventAdapter = new EventAdapter(activity, R.layout.item_event, eventList);
+        eventGrid.setAdapter(eventAdapter);
+
+    }
+    public void updateComment(Comment comment){
+        commentList.add(comment);
+        CommentAdapter commentAdapter = new CommentAdapter(activity, R.layout.item_comment, commentList);
+        commentGrid.setAdapter(commentAdapter);
     }
 
     public TextView getBarName() {

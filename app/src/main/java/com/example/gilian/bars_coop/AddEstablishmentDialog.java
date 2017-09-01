@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.gilian.bars_coop.R;
@@ -20,7 +21,7 @@ public class AddEstablishmentDialog extends Dialog {
     public AddEstablishmentDialog(Context context){
         super(context);
         this.setContentView(R.layout.add_esthablishment_dialog);
-        nameEstablishment = (TextView) findViewById(R.id.name_Bar);
+        nameEstablishment = (EditText) findViewById(R.id.name_Bar);
         cancelButton = (Button) findViewById(R.id.cancel_add_establishment);
         okButton = (Button) findViewById(R.id.ok_add_establishment);
 
@@ -37,7 +38,7 @@ public class AddEstablishmentDialog extends Dialog {
         return nameEstablishment;
     }
 
-    public void setNameEstablishment(TextView nameEstablishment) {
+    public void setNameEstablishment(EditText nameEstablishment) {
         this.nameEstablishment = nameEstablishment;
     }
 
