@@ -13,12 +13,12 @@
     <string name="map_box_id">pk.eyJ1IjoiamVyZW1pZTAwMCIsImEiOiJjajZtbmQxNWQyaHVvMzNueW4wa2k0ejJtIn0.KlQLHwiDKhXCI3gobANT9Q</string>
     <string name="event_title">Evenement</string>
     <string name="add_event_btn">+ event</string>
-    <string name="login">Username</string>
-    <string name="mdp">Password</string>
+    <string name="login">Identifiant</string>
+    <string name="mdp">Mot de passe</string>
     <string name="title">EveryDay Drinking</string>
     <string name="btn_Inscrit"> Inscription</string>
     <string name="log_up"> Inscription </string>
     <string name="name"> Nom</string>
     <string name="firstname"> Prenom </string>
-    <string name="Verifmdp"> Confirmation Password</string>
+    <string name="Verifmdp"> Confirmation du mot de passe</string>
 </resources>

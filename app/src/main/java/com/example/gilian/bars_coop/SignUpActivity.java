@@ -116,6 +116,10 @@ public class SignUpActivity extends AppCompatActivity {
             public void onResponse(Call<User> call, Response<User> response) {
                 if(response.isSuccessful()){
                     System.out.println("User envoyer");
+                    Intent intent =new Intent(SignUpActivity.this, MainActivity.class);
+                    Bundle extra = new Bundle();
+                    startActivity(intent);
+
                 }
 
             }
