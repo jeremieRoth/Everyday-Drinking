@@ -120,7 +120,7 @@ public class MapActivity extends AppCompatActivity {
                 }
 
 
-                lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 12000, 100, new android.location.LocationListener() {
+                lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 6000, 100, new android.location.LocationListener() {
                     @Override
                     public void onLocationChanged(Location location) {
                         //Log.d("GPS","longitude : "+location.getLongitude()+"latitude : "+location.getLatitude() );
@@ -164,7 +164,7 @@ public class MapActivity extends AppCompatActivity {
 
                             @Override
                             public void onClick(View view) {
-                                Toast.makeText(MapActivity.this, "Click cancel", Toast.LENGTH_SHORT).show();
+                                //Toast.makeText(MapActivity.this, "Click cancel", Toast.LENGTH_SHORT).show();
                                 addEstablishmentDialog.hide();
                             }
                         });
@@ -185,13 +185,13 @@ public class MapActivity extends AppCompatActivity {
                                     }
                                 }
                                 if(name!="" && nameUsed==false){
-                                    Toast.makeText(MapActivity.this, "Click ok, Bar:"+name, Toast.LENGTH_SHORT).show();
+                                    //Toast.makeText(MapActivity.this, "Click ok, Bar:"+name, Toast.LENGTH_SHORT).show();
 
                                     postEstablishment(name,latLngStock.getLongitude(),latLngStock.getLatitude());
 
                                 }
                                 else{
-                                    Toast.makeText(MapActivity.this, "name empty or used", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(MapActivity.this, "champ vide ou nom utilisée", Toast.LENGTH_SHORT).show();
                                 }
 
 
@@ -204,19 +204,7 @@ public class MapActivity extends AppCompatActivity {
 
                     }
                 });
-//                nMapboxmap.setOnMapLongClickListener(new com.mapbox.mapboxsdk.maps.MapboxMap.OnMapLongClickListener() {
-//                    @Override
-//                    public void onMapLongClick(@NonNull LatLng latLng) {
-//                        Toast.makeText(MapActivity.this, "LongClick latitude : "+latLng.getLatitude()+" longitude : "+latLng.getLongitude(), Toast.LENGTH_SHORT).show();
-//                        Log.d("LongPress", "latitude : "+latLng.getLatitude()+" longitude : "+latLng.getLongitude());
-//                        addMarker(nMapboxmap,new LatLng(latLng.getLatitude(),latLng.getLongitude()), "LongClick");
-//                        AlertDialog.Builder builder = new AlertDialog.Builder(MapActivity.this);
-//                        builder.setMessage("tutu")
-//                                .setTitle("zzzz");
-//                        AlertDialog dialog = builder.create();
-//                        //dialog.show();
-//                    }
-//                });
+
                 initRetrofit();
                 MapActivity.this.getEstablishments().enqueue(new Callback<List<Establishment>>() {
                     @Override
@@ -298,7 +286,7 @@ public class MapActivity extends AppCompatActivity {
                                                                             addCommentDialog.hide();
 
                                                                         }else {
-                                                                            Toast.makeText(MapActivity.this, "vide", Toast.LENGTH_SHORT).show();
+                                                                            Toast.makeText(MapActivity.this, "champ vide", Toast.LENGTH_SHORT).show();
                                                                         }
 
 
@@ -331,7 +319,7 @@ public class MapActivity extends AppCompatActivity {
                                                                             postEvent(eventText,establishmentSave);
                                                                             addEventDialog.hide();
                                                                         }else {
-                                                                            Toast.makeText(MapActivity.this, "vide", Toast.LENGTH_SHORT).show();
+                                                                            Toast.makeText(MapActivity.this, "champ vide", Toast.LENGTH_SHORT).show();
                                                                         }
                                                                     }
                                                                 });
@@ -355,7 +343,7 @@ public class MapActivity extends AppCompatActivity {
                                                     }else {
                                                         Log.d("API REST not successful", "event not successful");
 
-                                                        Toast.makeText(MapActivity.this, "getEvent Failure", Toast.LENGTH_SHORT).show();
+                                                        //Toast.makeText(MapActivity.this, "getEvent Failure", Toast.LENGTH_SHORT).show();
                                                     }
                                                 }
 
@@ -363,7 +351,7 @@ public class MapActivity extends AppCompatActivity {
                                                 public void onFailure(Call<List<Event>> call, Throwable t) {
                                                     Log.d("API REST FAILURE", "event Sa fonctionne pas");
                                                     Log.d("API REST FAILURE", t.toString());
-                                                    Toast.makeText(MapActivity.this, "getEvent Failure", Toast.LENGTH_SHORT).show();
+                                                    Toast.makeText(MapActivity.this, "erreur lors de la recuperation des event", Toast.LENGTH_SHORT).show();
                                                 }
                                             });
 
@@ -371,7 +359,7 @@ public class MapActivity extends AppCompatActivity {
                                         } else {
                                             Log.d("API REST not successful", "Comment not successful");
 
-                                            Toast.makeText(MapActivity.this, "getComment Failure", Toast.LENGTH_SHORT).show();
+                                            //Toast.makeText(MapActivity.this, "erreur lors de la recuperation des Comment", Toast.LENGTH_SHORT).show();
                                         }
                                     }
 
@@ -379,7 +367,7 @@ public class MapActivity extends AppCompatActivity {
                                     public void onFailure(Call<List<Comment>> call, Throwable t) {
                                         Log.d("API REST FAILURE", "Comment Sa fonctionne pas");
                                         Log.d("API REST FAILURE", t.toString());
-                                        Toast.makeText(MapActivity.this, "getComment Failure", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(MapActivity.this, "erreur lors de la recuperation des Comment", Toast.LENGTH_SHORT).show();
 
                                     }
                                 });
@@ -479,7 +467,7 @@ public class MapActivity extends AppCompatActivity {
             public void onResponse(Call<Event> call, Response<Event> response) {
                 if(response.isSuccessful()){
                     Event event1 = response.body();
-                    //MapActivity.this.establishmentDialog.updateEvent(event1);
+                    MapActivity.this.establishmentDialog.updateEvent(event1);
                 }else{
                     Log.d("responsEvent","response  not successful");
                     Toast.makeText(MapActivity.this, "event not successful", Toast.LENGTH_SHORT).show();
