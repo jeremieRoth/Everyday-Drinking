@@ -34,13 +34,13 @@ public interface EventService {
     @POST("event")
     Call<Event> addEvent(@Header("Authorization")String authHeader,
                             @Field("name") String name,
-                            @Field("establishment")Establishment establishment);
+                            @Field("establishment")int establishment);
     @FormUrlEncoded
     @PUT("event/{id}")
     Call<Event> editEvent(@Header("Authorization")String authHeader,
                              @Path("id") int id,
                              @Field("name") String name,
-                             @Field("establishment")Establishment establishment);
+                             @Field("establishment")int establishment);
 
 
 }
