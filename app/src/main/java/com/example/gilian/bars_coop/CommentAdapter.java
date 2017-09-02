@@ -43,8 +43,11 @@ public class CommentAdapter extends ArrayAdapter<Comment>{
 
         TextView name = (TextView) view.findViewById(R.id.name_comment);
         TextView commentTxt = (TextView) view.findViewById(R.id.body_comment);
+        TextView commentRate = (TextView) view.findViewById(R.id.comment_rating);
+
         name.setText(commentList.get(position).getUser().getLogin());
         commentTxt.setText(commentList.get(position).getComment());
+        commentRate.setText("note : "+commentList.get(position).getScore()+"/5");
         return view;
     }
 }

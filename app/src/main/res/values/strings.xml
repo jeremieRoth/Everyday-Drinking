@@ -25,4 +25,6 @@
     <string name="title_add_event">ajouter un evenement</string>
     <string name="hint_add_comment">comentaire</string>
     <string name="hint_add_event">evenement</string>
+    <string name="title_rating_add_comment">etablisement note</string>
+    
 </resources>

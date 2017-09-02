@@ -17,6 +17,19 @@
         android:layout_height="wrap_content"
         android:id="@+id/comment_text"
         android:hint="@string/hint_add_comment"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/title_rating_add_comment"
+        android:textSize="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:gravity="center" />
+    <RatingBar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/comment_rating_bar"
+        android:numStars="5"/>
     <RelativeLayout
         android:layout_marginTop="10dp"
         android:layout_width="match_parent"

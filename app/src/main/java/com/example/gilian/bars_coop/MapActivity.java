@@ -280,9 +280,10 @@ public class MapActivity extends AppCompatActivity {
                                                                     @Override
                                                                     public void onClick(View view) {
                                                                         String comment = String.valueOf(MapActivity.this.addCommentDialog.getCommentTxt().getText());
+                                                                        int rate = MapActivity.this.addCommentDialog.getRatingBar().getNumStars();
                                                                         if (comment !=""){
                                                                             //Toast.makeText(MapActivity.this, comment, Toast.LENGTH_SHORT).show();
-                                                                            postComment(comment,establishmentSave);
+                                                                            postComment(comment,establishmentSave,rate);
                                                                             addCommentDialog.hide();
 
                                                                         }else {
@@ -481,10 +482,10 @@ public class MapActivity extends AppCompatActivity {
             }
         });
     }
-    public void postComment(String comment, Establishment establishment){
+    public void postComment(String comment, Establishment establishment, int rate){
         CommentService commentService = retrofit.create(CommentService.class);
         Log.d("PostComment","user : "+this.user.getLogin()+" comment : "+comment);
-        Call<Comment> commentCall = commentService.addComment(authHeader, comment, 5, this.user.getId(),establishment.getId());
+        Call<Comment> commentCall = commentService.addComment(authHeader, comment, rate, this.user.getId(),establishment.getId());
         commentCall.enqueue(new Callback<Comment>() {
             @Override
             public void onResponse(Call<Comment> call, Response<Comment> response) {

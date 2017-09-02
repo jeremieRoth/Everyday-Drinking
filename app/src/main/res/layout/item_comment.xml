@@ -24,14 +24,22 @@
         android:layout_toRightOf="@id/name_comment"
         />
 
-    <ImageButton
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:id="@+id/comment_rating"
+        android:layout_marginRight="3dp"
+        android:gravity="center"
+        android:layout_alignParentRight="true"/>
+
+    <!--<ImageButton
         android:layout_width="40dp"
         android:layout_height="30dp"
         android:layout_alignParentRight="true"
         android:src="@mipmap/red_dislike"
         android:background="@color/dialog_color"
-        android:scaleType="centerCrop"/>
-    
+        android:scaleType="centerCrop"/>-->
+
 
 
 </RelativeLayout>
