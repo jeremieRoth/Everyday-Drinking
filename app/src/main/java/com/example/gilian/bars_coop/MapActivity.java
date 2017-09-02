@@ -422,8 +422,8 @@ public class MapActivity extends AppCompatActivity {
     public void initRetrofit()//Initialise retrofit obligatoire pour effectuer une requette
     {
         Retrofit.Builder builder = new Retrofit.Builder()
+                .baseUrl("http://192.168.1.254/git/api_EverydayDrinking/web/")
                 //.baseUrl("http://gilian.ddns.net/git/api_EverydayDrinking/web/")
-                .baseUrl("http://gilian.ddns.net/git/api_EverydayDrinking/web/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(httpClient.build());
 
@@ -460,7 +460,7 @@ public class MapActivity extends AppCompatActivity {
         EventService eventService = retrofit.create(EventService.class);
         Log.d("PostEvent","event : "+event);
        // this.event = event;
-        Call<Event> eventCall = eventService.addEvent(authHeader,event,establishment);
+        Call<Event> eventCall = eventService.addEvent(authHeader,event,establishment.getId());
 
         eventCall.enqueue(new Callback<Event>() {
             @Override
@@ -561,7 +561,6 @@ public class MapActivity extends AppCompatActivity {
        // new Callback<List<Establishment>>()
         //establishmentService.addEstablishment()
     }
-
     public  void addMarker(MapboxMap mapboxMap, LatLng latLng, String name){
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.position(latLng);
@@ -569,8 +568,4 @@ public class MapActivity extends AppCompatActivity {
         markerOptions.snippet(getResources().getString(R.string.marker_msg));
         mapboxMap.addMarker(markerOptions);
     }
-
-
-
-
 }
