@@ -29,7 +29,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/comment_rating_bar"
-        android:numStars="5"/>
+        android:numStars="5"
+        android:stepSize="0.5"
+        android:rating="5"
+        android:clickable="true"/>
     <RelativeLayout
         android:layout_marginTop="10dp"
         android:layout_width="match_parent"

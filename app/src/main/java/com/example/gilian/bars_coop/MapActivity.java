@@ -280,11 +280,17 @@ public class MapActivity extends AppCompatActivity {
                                                                     @Override
                                                                     public void onClick(View view) {
                                                                         String comment = String.valueOf(MapActivity.this.addCommentDialog.getCommentTxt().getText());
-                                                                        int rate = MapActivity.this.addCommentDialog.getRatingBar().getNumStars();
+
+                                                                        float rate = MapActivity.this.addCommentDialog.getRatingBar().getRating();
                                                                         if (comment !=""){
+                                                                            if (comment.length()<25){
+                                                                                postComment(comment,establishmentSave,rate);
+                                                                                addCommentDialog.hide();
+                                                                            }else {
+                                                                                Toast.makeText(MapActivity.this, "commentaire trop long", Toast.LENGTH_SHORT).show();
+                                                                            }
                                                                             //Toast.makeText(MapActivity.this, comment, Toast.LENGTH_SHORT).show();
-                                                                            postComment(comment,establishmentSave,rate);
-                                                                            addCommentDialog.hide();
+
 
                                                                         }else {
                                                                             Toast.makeText(MapActivity.this, "champ vide", Toast.LENGTH_SHORT).show();
@@ -482,7 +488,7 @@ public class MapActivity extends AppCompatActivity {
             }
         });
     }
-    public void postComment(String comment, Establishment establishment, int rate){
+    public void postComment(String comment, Establishment establishment, float rate){
         CommentService commentService = retrofit.create(CommentService.class);
         Log.d("PostComment","user : "+this.user.getLogin()+" comment : "+comment);
         Call<Comment> commentCall = commentService.addComment(authHeader, comment, rate, this.user.getId(),establishment.getId());
@@ -547,7 +553,7 @@ public class MapActivity extends AppCompatActivity {
                     //addMarker(nMapboxmap,latLng, name);
                     //establishmentList.add(establishment);
                     Log.d("PostCall","location: "+location.getLatitude()+" "+location.getLongitude()+ " id "+location.getId());
-                    Toast.makeText(MapActivity.this, "location: "+location.getLatitude()+" "+location.getLongitude()+ " id "+location.getId(), Toast.LENGTH_SHORT).show();
+                   // Toast.makeText(MapActivity.this, "location: "+location.getLatitude()+" "+location.getLongitude()+ " id "+location.getId(), Toast.LENGTH_SHORT).show();
                 }
                 else{
                     Toast.makeText(MapActivity.this, "Base de donnée inaccessible", Toast.LENGTH_SHORT).show();

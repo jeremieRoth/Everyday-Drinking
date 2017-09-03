@@ -25,6 +25,7 @@ public class AddCommentDialog extends Dialog{
         cancelButton = (Button) findViewById(R.id.cancel_add_comment);
         okButton = (Button) findViewById(R.id.ok_add_comment);
         ratingBar = (RatingBar) findViewById(R.id.comment_rating_bar);
+        //ratingBar.setRating(5);
     }
 
     public TextView getCommentTxt() {

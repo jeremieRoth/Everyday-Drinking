@@ -32,7 +32,7 @@ public interface CommentService {
     @POST("comment")
     Call<Comment> addComment(@Header("Authorization")String authHeader,
                              @Field("comment")String comment,
-                             @Field("score")int score,
+                             @Field("score")float score,
                              @Field("user")int user,
                              @Field("establishment")int establishment);
 
@@ -40,7 +40,7 @@ public interface CommentService {
     @PUT("comment")
     Call<Comment> editComment(@Header("Authorization")String authHeader,
                               @Field("comment")String comment,
-                              @Field("score")int score,
+                              @Field("score")float score,
                               @Field("user")int user,
                               @Field("establishment")int establishment);
 }
